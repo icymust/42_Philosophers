@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 10:56:32 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/03 16:58:44 by mmustone         ###   ########.fr       */
+/*   Updated: 2026/02/05 18:07:01 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <sys/time.h> // gettimeofday
 # include <unistd.h>   // usleep
 
+typedef struct s_philo t_philo;
+
 typedef struct s_vars
 {
 	int				philos_size;
@@ -28,6 +30,8 @@ typedef struct s_vars
 	int				time_to_eat;
 	int				time_to_sleep;
 	int must_eat; // -1
+
+	t_philo			*philos;
 
 	long			start_time;
 
@@ -65,5 +69,6 @@ int					assign_vars(t_vars *vars, int ac, char **av);
 long				get_time_in_ms(void);
 void				cleanup(t_vars *vars, t_philo *philos);
 void				*routine(void *arg);
+void				*monitor(void *arg);
 
 #endif

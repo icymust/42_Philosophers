@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 10:18:37 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/03 17:40:56 by mmustone         ###   ########.fr       */
+/*   Updated: 2026/02/05 17:57:10 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(int ac, char **av)
 	t_philo	*philos;
 	int		i;
 	int created;
+	pthread_t monitor_thread;
 
 	vars.forks = NULL;
 	philos = NULL;
@@ -43,6 +44,7 @@ int	main(int ac, char **av)
 	}
 	// потоки
 	i = 0;
+	pthread_create(&monitor_thread, NULL, monitor, &vars);
 	while (i < vars.philos_size)
 	{
 		if (pthread_create(&philos[i].thread, NULL,
@@ -61,6 +63,9 @@ int	main(int ac, char **av)
 		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
+
+	pthread_join(monitor_thread, NULL);
+
 
 	cleanup(&vars, philos);
 	return (0);
