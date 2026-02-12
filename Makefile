@@ -3,7 +3,7 @@ NAME = philo
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c init.c utils.c routine.c
+SRCS = src/main.c src/init.c src/utils.c src/routine.c src/monitor.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
@@ -14,7 +14,7 @@ $(NAME): $(OBJS)
 clean:
 	rm -f $(OBJS)
 
-fclean:
+fclean: clean
 	rm -f $(NAME)
 
 re: fclean all

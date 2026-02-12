@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 14:37:50 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/03 17:39:25 by mmustone         ###   ########.fr       */
+/*   Updated: 2026/02/12 17:12:58 by martinmust       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../include/philosophers.h"
 
 int	check_av(char *av)
 {
@@ -41,6 +41,7 @@ int	init_philos(t_vars *vars, t_philo **philos)
 	if (!*philos)
 		return (1);
 	memset(*philos, 0, sizeof(t_philo) * vars->philos_size);
+	vars->philos = *philos;
 	i = 0;
 	while (i < vars->philos_size)
 	{
