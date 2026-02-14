@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: martinmustonen <martinmustonen@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 14:37:46 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/13 00:18:32 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/14 22:57:47 by martinmusto      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+int	simulation_stopped(t_vars *vars)
+{
+	int	stopped;
+
+	pthread_mutex_lock(&vars->state_mutex);
+	stopped = vars->die;
+	pthread_mutex_unlock(&vars->state_mutex);
+	return (stopped);
+}
 
 void	print_state(t_philo *philo, char *str)
 {
@@ -42,7 +52,7 @@ void	release_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-static void	cleanup_resources(t_vars *vars, t_philo *philos)
+void	cleanup(t_vars *vars, t_philo *philos)
 {
 	int	i;
 
@@ -50,13 +60,16 @@ static void	cleanup_resources(t_vars *vars, t_philo *philos)
 	{
 		i = -1;
 		while (++i < vars->philos_size)
-			pthread_mutex_destroy(&philos[i].meal_mutex);
+		{
+			if (philos[i].meal_mutex_init)
+				pthread_mutex_destroy(&philos[i].meal_mutex);
+		}
 		free(philos);
 	}
 	if (vars->forks)
 	{
 		i = -1;
-		while (++i < vars->philos_size)
+		while (++i < vars->forks_init)
 			pthread_mutex_destroy(&vars->forks[i]);
 		free(vars->forks);
 	}
@@ -64,9 +77,4 @@ static void	cleanup_resources(t_vars *vars, t_philo *philos)
 		pthread_mutex_destroy(&vars->print_mutex);
 	if (vars->state_mutex_init)
 		pthread_mutex_destroy(&vars->state_mutex);
-}
-
-void	cleanup(t_vars *vars, t_philo *philos)
-{
-	cleanup_resources(vars, philos);
 }

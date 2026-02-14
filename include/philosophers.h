@@ -36,7 +36,6 @@ typedef struct s_vars
 	long				start_time;
 
 	int					die;
-	int					finish;
 
 	pthread_mutex_t		print_mutex;
 	pthread_mutex_t		state_mutex;

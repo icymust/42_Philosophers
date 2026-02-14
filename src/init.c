@@ -14,8 +14,9 @@
 
 int	check_av(char *av)
 {
-	int	i;
-	int	result;
+	int		i;
+	long	result;
+	int		digit;
 
 	i = 0;
 	result = 0;
@@ -25,12 +26,15 @@ int	check_av(char *av)
 	{
 		if (av[i] < '0' || av[i] > '9')
 			return (-1);
-		result = result * 10 + (av[i] - '0');
+		digit = av[i] - '0';
+		if (result > (INT_MAX - digit) / 10)
+			return (-1);
+		result = result * 10 + digit;
 		i++;
 	}
 	if (result <= 0)
 		return (-1);
-	return (result);
+	return ((int)result);
 }
 
 int	init_philos(t_vars *vars, t_philo **philos)
@@ -47,7 +51,6 @@ int	init_philos(t_vars *vars, t_philo **philos)
 	{
 		(*philos)[i].id = i + 1;
 		(*philos)[i].vars = vars;
-		(*philos)[i].last_meal = vars->start_time;
 		if (pthread_mutex_init(&(*philos)[i].meal_mutex, NULL) != 0)
 			return (1);
 		(*philos)[i].meal_mutex_init = 1;
@@ -84,7 +87,6 @@ int	init_forks_and_mutex(t_vars *vars, t_philo *philos)
 
 int	assign_vars(t_vars *vars, int ac, char **av)
 {
-	memset(vars, 0, sizeof(t_vars));
 	vars->philos_size = check_av(av[1]);
 	vars->time_to_die = check_av(av[2]);
 	vars->time_to_eat = check_av(av[3]);
