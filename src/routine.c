@@ -6,7 +6,7 @@
 /*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 16:55:02 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/12 22:44:10 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/16 21:52:27 by martinmust       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ void	take_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		print_state(philo, "taken a fork");
+		print_state(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, "taken a fork");
+		print_state(philo, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, "taken a fork");
+		print_state(philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		print_state(philo, "taken a fork");
+		print_state(philo, "has taken a fork");
 	}
 }
 
@@ -60,7 +60,7 @@ void	*routine(void *arg)
 	if (philo->left_fork == philo->right_fork)
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, "taken a fork");
+		print_state(philo, "has taken a fork");
 		usleep(philo->vars->time_to_die * 1000);
 		pthread_mutex_unlock(philo->left_fork);
 		return (NULL);
