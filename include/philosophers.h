@@ -6,7 +6,7 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 10:56:32 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/17 12:41:39 by mmustone         ###   ########.fr       */
+/*   Updated: 2026/02/17 14:57:33 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ void					*routine(void *arg);
 void					*monitor_func(void *arg);
 int						simulation_stopped(t_vars *vars);
 void					init_time(t_vars *vars, t_philo *philos);
+void					think_delay(t_philo *philo);
 
 #endif

@@ -6,11 +6,26 @@
 /*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 14:37:46 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/17 12:10:59 by mmustone         ###   ########.fr       */
+/*   Updated: 2026/02/17 16:02:44 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+void	think_delay(t_philo *philo)
+{
+	long	t;
+	long	ttd;
+	long	tte;
+
+	if (philo->vars->philos_size % 2 == 0)
+		return ;
+	ttd = philo->vars->time_to_die;
+	tte = philo->vars->time_to_eat;
+	t = ttd - tte - philo->vars->time_to_sleep;
+	if (t > 0)
+		usleep((t / 2) * 1000);
+}
 
 void	print_state(t_philo *philo, char *str)
 {
@@ -42,7 +57,7 @@ void	release_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-static void	cleanup(t_vars *vars, t_philo *philos)
+void	cleanup(t_vars *vars, t_philo *philos)
 {
 	int	i;
 

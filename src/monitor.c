@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 23:22:18 by martinmust        #+#    #+#             */
-/*   Updated: 2026/02/13 00:23:33 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/17 13:15:20 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 static int	check_death(t_vars *vars, int i)
 {
 	long	last_meal;
+	long	current_time;
 
 	pthread_mutex_lock(&vars->philos[i].meal_mutex);
 	last_meal = vars->philos[i].last_meal;
 	pthread_mutex_unlock(&vars->philos[i].meal_mutex);
-	if (get_time_in_ms() - last_meal > vars->time_to_die)
+	current_time = get_time_in_ms();
+	if (current_time - last_meal > vars->time_to_die)
 	{
 		pthread_mutex_lock(&vars->state_mutex);
 		vars->die = 1;
 		pthread_mutex_unlock(&vars->state_mutex);
 		pthread_mutex_lock(&vars->print_mutex);
-		printf("%ld %d died\n", get_time_in_ms() - vars->start_time,
+		printf("%ld %d died\n", current_time - vars->start_time,
 			vars->philos[i].id);
 		pthread_mutex_unlock(&vars->print_mutex);
 		return (1);
@@ -74,7 +76,7 @@ void	*monitor_func(void *arg)
 		}
 		if (vars->must_eat != -1 && check_all_fed(vars))
 			return (NULL);
-		usleep(1000);
+		usleep(500);
 	}
 	return (NULL);
 }
