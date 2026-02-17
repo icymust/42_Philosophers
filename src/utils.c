@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 14:37:46 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/13 00:18:32 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/17 12:10:59 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	release_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-static void	cleanup_resources(t_vars *vars, t_philo *philos)
+static void	cleanup(t_vars *vars, t_philo *philos)
 {
 	int	i;
 
@@ -64,9 +64,4 @@ static void	cleanup_resources(t_vars *vars, t_philo *philos)
 		pthread_mutex_destroy(&vars->print_mutex);
 	if (vars->state_mutex_init)
 		pthread_mutex_destroy(&vars->state_mutex);
-}
-
-void	cleanup(t_vars *vars, t_philo *philos)
-{
-	cleanup_resources(vars, philos);
 }

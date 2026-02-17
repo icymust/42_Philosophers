@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 00:35:27 by martinmust        #+#    #+#             */
-/*   Updated: 2026/02/13 00:35:28 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/17 12:48:14 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	init_simulation(t_vars *vars, t_philo **philos, int ac, char **av)
 	}
 	if (assign_vars(vars, ac, av))
 		return (1);
-	vars->start_time = get_time_in_ms();
 	if (init_philos(vars, philos))
 		return (1);
 	if (init_forks_and_mutex(vars, *philos))
@@ -35,22 +34,33 @@ static int	start_threads(t_vars *vars, t_philo *philos, pthread_t *monitor,
 {
 	int	i;
 
-	pthread_create(monitor, NULL, monitor_func, vars);
+	init_time(vars, philos);
 	i = 0;
 	while (i < vars->philos_size)
 	{
 		if (pthread_create(&philos[i].thread, NULL, routine, &philos[i]) != 0)
 		{
+			pthread_mutex_lock(&vars->state_mutex);
 			vars->die = 1;
+			pthread_mutex_unlock(&vars->state_mutex);
 			break ;
 		}
 		i++;
 		(*created)++;
 	}
+	if (pthread_create(monitor, NULL, monitor_func, vars) != 0)
+	{
+		pthread_mutex_lock(&vars->state_mutex);
+		vars->die = 1;
+		pthread_mutex_unlock(&vars->state_mutex);
+		return (1);
+	}
+	vars->monitor_init = 1;
 	return (0);
 }
 
-static void	wait_simulation(t_philo *philos, int created, pthread_t monitor)
+static void	wait_simulation(t_philo *philos, int created, pthread_t monitor,
+		int monitor_init)
 {
 	int	i;
 
@@ -60,7 +70,8 @@ static void	wait_simulation(t_philo *philos, int created, pthread_t monitor)
 		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
-	pthread_join(monitor, NULL);
+	if (monitor_init)
+		pthread_join(monitor, NULL);
 }
 
 int	main(int ac, char **av)
@@ -83,7 +94,7 @@ int	main(int ac, char **av)
 		cleanup(&vars, philos);
 		return (1);
 	}
-	wait_simulation(philos, created, monitor_thread);
+	wait_simulation(philos, created, monitor_thread, vars.monitor_init);
 	cleanup(&vars, philos);
 	return (0);
 }

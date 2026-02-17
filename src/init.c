@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 14:37:50 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/12 17:12:58 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/17 12:02:48 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	init_philos(t_vars *vars, t_philo **philos)
 	{
 		(*philos)[i].id = i + 1;
 		(*philos)[i].vars = vars;
-		(*philos)[i].last_meal = vars->start_time;
 		if (pthread_mutex_init(&(*philos)[i].meal_mutex, NULL) != 0)
 			return (1);
 		(*philos)[i].meal_mutex_init = 1;
@@ -100,4 +99,17 @@ int	assign_vars(t_vars *vars, int ac, char **av)
 			return (1);
 	}
 	return (0);
+}
+
+void	init_time(t_vars *vars, t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	vars->start_time = get_time_in_ms();
+	while (i < vars->philos_size)
+	{
+		philos[i].last_meal = vars->start_time;
+		i++;
+	}
 }

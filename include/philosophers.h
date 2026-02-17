@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martinmust <martinmust@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mmustone <mmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 10:56:32 by mmustone          #+#    #+#             */
-/*   Updated: 2026/02/13 00:23:33 by martinmust       ###   ########.fr       */
+/*   Updated: 2026/02/17 12:41:39 by mmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_vars
 	pthread_mutex_t		*forks;
 
 	int					forks_init;
+	int					monitor_init;
 	int					print_mutex_init;
 	int					state_mutex_init;
 }						t_vars;
@@ -73,5 +74,6 @@ void					cleanup(t_vars *vars, t_philo *philos);
 void					*routine(void *arg);
 void					*monitor_func(void *arg);
 int						simulation_stopped(t_vars *vars);
+void					init_time(t_vars *vars, t_philo *philos);
 
 #endif

@@ -2,6 +2,7 @@
 *.d
 philo
 .vscode
+/42*
 # Object files
 *.o
 *.ko
